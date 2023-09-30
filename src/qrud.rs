@@ -288,7 +288,7 @@ impl Qrud {
             scale.refresh_note_nums();
 
             for gut in &mut self.guts {
-                for open_note in &mut gut.open_notes {
+                if let Some(open_note) = gut.open_notes.get_mut(scale_idx) {
                     if *open_note >= scale.notes.len() as u16 {
                         *open_note = (scale.notes.len() - 1) as u16;
                     }
@@ -306,7 +306,7 @@ impl Qrud {
             scale.refresh_note_nums();
 
             for gut in &mut self.guts {
-                for open_note in &mut gut.open_notes {
+                if let Some(open_note) = gut.open_notes.get_mut(scale_idx) {
                     if *open_note >= scale.notes.len() as u16 {
                         *open_note = (scale.notes.len() - 1) as u16;
                     }
