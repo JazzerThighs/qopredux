@@ -2,6 +2,31 @@
 mod qr_input;
 mod scale;
 
+
+pub struct MIDIParams {
+    pub output: Vec<bool>,
+}
+impl MIDIParams {
+    pub fn new(output: Vec<bool>) -> Self {
+        MIDIParams { output }
+    }
+}
+
+pub struct Oscillator {
+    pub output: bool,
+    pub wave_type: String,
+    pub gain: f32,
+}
+impl Oscillator {
+    pub fn new(output: bool, wave_type: String, gain: f32) -> Self {
+        Oscillator {
+            output,
+            wave_type,
+            gain,
+        }
+    }
+}
+
 pub struct Gut {
     pub name: String,
     pub description: String,
@@ -53,30 +78,6 @@ impl Gut {
             aso_in,
             transp_in,
             frets,
-        }
-    }
-}
-
-pub struct MIDIParams {
-    pub output: Vec<bool>,
-}
-impl MIDIParams {
-    pub fn new(output: Vec<bool>) -> Self {
-        MIDIParams { output }
-    }
-}
-
-pub struct Oscillator {
-    pub output: bool,
-    pub wave_type: String,
-    pub gain: f32,
-}
-impl Oscillator {
-    pub fn new(output: bool, wave_type: String, gain: f32) -> Self {
-        Oscillator {
-            output,
-            wave_type,
-            gain,
         }
     }
 }
@@ -213,6 +214,23 @@ pub struct Aero {
     pub transp_in: qr_input::TranspositionInput,
     pub pads: Vec<Pad>,
     pub combos: Vec<Combo>,
+}
+impl Aero {
+    pub fn new(name: String,
+description: String,
+aero_num: u8,
+transp_in: qr_input::TranspositionInput,
+pads: Vec<Pad>,
+combos: Vec<Combo>) -> Self {
+    Aero {
+        name,
+        description,
+        aero_num,
+        transp_in,
+        pads,
+        combos,
+    }
+}
 }
 
 pub struct Qrud {
