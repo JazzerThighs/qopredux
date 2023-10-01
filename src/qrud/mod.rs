@@ -1,14 +1,14 @@
 #![allow(dead_code)]
+use std::time::{SystemTime, UNIX_EPOCH};
 mod qr_input;
 mod scale;
-
 
 pub struct MIDIParams {
     pub output: Vec<bool>,
 }
 impl MIDIParams {
     pub fn new(output: Vec<bool>) -> Self {
-        MIDIParams { output }
+        return MIDIParams { output };
     }
 }
 
@@ -19,11 +19,11 @@ pub struct Oscillator {
 }
 impl Oscillator {
     pub fn new(output: bool, wave_type: String, gain: f32) -> Self {
-        Oscillator {
+        return Oscillator {
             output,
             wave_type,
             gain,
-        }
+        };
     }
 }
 
@@ -62,7 +62,7 @@ impl Gut {
         transp_in: qr_input::TranspositionInput,
         frets: Vec<Fret>,
     ) -> Self {
-        Gut {
+        return Gut {
             name,
             description,
             gut_num,
@@ -78,7 +78,7 @@ impl Gut {
             aso_in,
             transp_in,
             frets,
-        }
+        };
     }
 }
 
@@ -107,7 +107,7 @@ impl Fret {
         aso_in: qr_input::ActionInput,
         transp_in: qr_input::TranspositionInput,
     ) -> Self {
-        Fret {
+        return Fret {
             name,
             description,
             gut_num,
@@ -118,7 +118,7 @@ impl Fret {
             sos_in,
             aso_in,
             transp_in,
-        }
+        };
     }
 }
 
@@ -145,7 +145,7 @@ impl Pad {
         sos_in: qr_input::ActionInput,
         aso_in: qr_input::ActionInput,
     ) -> Self {
-        Pad {
+        return Pad {
             name,
             description,
             aero_num,
@@ -155,7 +155,7 @@ impl Pad {
             asu_in,
             sos_in,
             aso_in,
-        }
+        };
     }
 }
 
@@ -166,13 +166,13 @@ pub struct Delta {
     pub cents_delta: f32,
 }
 impl Delta {
-    pub fn new(note_bool: bool, cent_bool: bool, note_delta: i16, cents_delta: f32) -> Self {
-        Delta {
-            note_bool,
-            cent_bool,
-            note_delta,
-            cents_delta,
-        }
+    pub fn new() -> Self {
+        return Delta {
+            note_bool: true,
+            cent_bool: true,
+            note_delta: 0,
+            cents_delta: 0.0,
+        };
     }
 }
 
@@ -195,7 +195,7 @@ impl Combo {
         transp_in: qr_input::TranspositionInput,
         delta_set: Vec<Delta>,
     ) -> Self {
-        Combo {
+        return Combo {
             name,
             description,
             aero_num,
@@ -203,7 +203,7 @@ impl Combo {
             combo,
             transp_in,
             delta_set,
-        }
+        };
     }
 }
 
@@ -216,27 +216,29 @@ pub struct Aero {
     pub combos: Vec<Combo>,
 }
 impl Aero {
-    pub fn new(name: String,
-description: String,
-aero_num: u8,
-transp_in: qr_input::TranspositionInput,
-pads: Vec<Pad>,
-combos: Vec<Combo>) -> Self {
-    Aero {
-        name,
-        description,
-        aero_num,
-        transp_in,
-        pads,
-        combos,
+    pub fn new(
+        name: String,
+        description: String,
+        aero_num: u8,
+        transp_in: qr_input::TranspositionInput,
+        pads: Vec<Pad>,
+        combos: Vec<Combo>,
+    ) -> Self {
+        return Aero {
+            name,
+            description,
+            aero_num,
+            transp_in,
+            pads,
+            combos,
+        };
     }
-}
 }
 
 pub struct Qrud {
     pub name: String,
     pub version: String,
-    pub unix_timestamp: String,
+    pub unix_timestamp: u64,
     pub description: String,
     pub debounce_timer: u16,
     pub scales: Vec<scale::Scale>,
@@ -244,26 +246,43 @@ pub struct Qrud {
     pub aeros: Vec<Aero>,
 }
 impl Qrud {
-    pub fn new(
-        name: String,
-        version: String,
-        unix_timestamp: String,
-        description: String,
-        debounce_timer: u16,
-        scales: Vec<scale::Scale>,
-        guts: Vec<Gut>,
-        aeros: Vec<Aero>,
-    ) -> Self {
-        Qrud {
-            name,
-            version,
-            unix_timestamp,
-            description,
-            debounce_timer,
-            scales,
-            guts,
-            aeros,
-        }
+    pub fn new(&mut self) -> Self {
+        let current_time = SystemTime::now();
+        let new_unix_timestamp = current_time
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards") // This should not happen unless system clock is misconfigured
+            .as_secs(); // This gives you the timestamp as u64
+
+        return Qrud {
+            name: String::from("Qwert-O-Phone Redux Default"),
+            version: String::from("0.1.0"),
+            unix_timestamp: new_unix_timestamp,
+            description: String::from("Default QRUD"),
+            debounce_timer: 0,
+            scales: vec![scale::Scale::new(scale::ScaleType::EqualTemperament {
+                new_reference_note: 69,
+                new_tuning_hz: 440.0,
+                new_octave_divisions: 12,
+                new_note_class_set: vec![
+                    String::from("C"),
+                    String::from("C#"),
+                    String::from("D"),
+                    String::from("D#"),
+                    String::from("E"),
+                    String::from("F"),
+                    String::from("F#"),
+                    String::from("G"),
+                    String::from("G#"),
+                    String::from("A"),
+                    String::from("A#"),
+                    String::from("B"),
+                ],
+                octave: -2,
+                note_amount: 128,
+            })],
+            guts: vec![],
+            aeros: vec![],
+        };
     }
 
     pub fn refresh_scale_nums(&mut self) {

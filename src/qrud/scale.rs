@@ -6,13 +6,13 @@ pub struct Note {
     pub color: String,
 }
 impl Note {
-    pub fn new(name: String, scale_num: u8, note_num: u16, frequency: f32, color: String) -> Self {
+    pub fn new() -> Self {
         Note {
-            name,
-            scale_num,
-            note_num,
-            frequency,
-            color,
+            name: String::from(""),
+            scale_num: 0,
+            note_num: 0,
+            frequency: 0.0,
+            color: String::from("FFFFFF"),
         }
     }
     pub fn set_name(&mut self, new_name: String) {
@@ -64,9 +64,10 @@ pub enum ScaleType {
     Hijaz,
     ShonaMbira,
     BohlenPierce,
+    Arbitrary,
 }
 impl Scale {
-    pub fn new(scale_type: ScaleType) -> Option<Self> {
+    pub fn new(scale_type: ScaleType) -> Self {
         match scale_type {
             ScaleType::EqualTemperament {
                 new_reference_note,
@@ -101,7 +102,7 @@ impl Scale {
                     }
                 }
 
-                Some(Scale {
+                Scale {
                     name: format!("{}-Tone Equal Temperament", new_octave_divisions),
                     description: if new_tuning_hz == 440.0 && new_octave_divisions == 12 {
                         String::from("MIDI")
@@ -118,9 +119,19 @@ impl Scale {
                     octave_divisions: new_octave_divisions,
                     note_class_set: new_note_class_set,
                     notes: new_notes,
-                })
+                }
             },
-            _ => None, // Return None for the placeholder
+            _ => Scale {
+                    name: String::from("Arbitrary Scale"),
+                    description: String::from(""),
+                    scale_num: 0,
+                    scale_type: String::from("Arbitrary"),
+                    reference_note: 0,
+                    tuning_hz: 0.0,
+                    octave_divisions: 0,
+                    note_class_set: vec![],
+                    notes: vec![Note::new()]
+                },
         }
     }
 
