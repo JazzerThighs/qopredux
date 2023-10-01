@@ -301,7 +301,7 @@ impl Qrud {
         }
     }
     pub fn remove_scale_at(&mut self, index: usize) {
-        if index < self.scales.len() {
+        if index < self.scales.len() && self.scales.len() > 1 {
             self.scales.remove(index);
             self.refresh_scale_nums();
 
@@ -331,7 +331,7 @@ impl Qrud {
         }
     }
     pub fn remove_scale_note_at(&mut self, scale_idx: usize, note_idx: usize) {
-        if scale_idx < self.scales.len() {
+        if scale_idx < self.scales.len() && self.scales.len() > 1 {
             let scale = &mut self.scales[scale_idx];
             if note_idx < scale.notes.len() {
                 scale.notes.remove(note_idx);
